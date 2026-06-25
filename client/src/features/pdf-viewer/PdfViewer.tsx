@@ -160,10 +160,10 @@ export function PdfViewer() {
         {/* 第 4 层：浮动图例 (z-40) - 放在平移容器外部，保持固定在视口右下角 */}
         <LegendPanel />
         
-        {/* 页码信息浮层 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-50 pointer-events-none">
+        {/* 页码信息浮层 与悬浮工具条冲突，暂时注释掉 */}
+        {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-50 pointer-events-none">
           第 {currentPage} / {totalPages} 页
-        </div>
+        </div> */}
       </div>
     </div>
   );
