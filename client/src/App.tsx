@@ -149,7 +149,7 @@ function App() {
         {/* 右侧折叠切换按钮 */}
         <button
           onClick={() => dispatch(toggleRightPanel())}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-40 w-5 h-12 bg-white border border-gray-200 rounded-l-md shadow-sm flex items-center justify-center hover:bg-gray-50 transition-all"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-40 w-5 h-12 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-l-md shadow-sm flex items-center justify-center hover:bg-gray-50 transition-all"
           style={{ right: rightPanelOpen ? 288 : 0 }}
           title={rightPanelOpen ? "收起右侧面板" : "展开右侧面板"}
         >
@@ -162,13 +162,13 @@ function App() {
 
         {/* 右侧：图层与元素树 */}
         <aside
-          className="flex-shrink-0 z-30 border-l shadow-sm flex flex-col h-full transition-all duration-300 ease-in-out overflow-hidden"
+          className="flex-shrink-0 z-30 flex flex-col h-full transition-all duration-300 ease-in-out overflow-hidden bg-white"
           style={{ width: rightPanelOpen ? 288 : 0 }}
         >
           <Tabs defaultValue="layers" className="flex flex-col h-full">
-            <TabsList className="w-full justify-start rounded-none border-b">
-              <TabsTrigger value="layers">图层</TabsTrigger>
-              <TabsTrigger value="tree">元素树</TabsTrigger>
+            <TabsList className="w-full justify-start rounded-none border-b border-gray-100 bg-white">
+              <TabsTrigger value="layers" className="text-xs">图层</TabsTrigger>
+              <TabsTrigger value="tree" className="text-xs">元素树</TabsTrigger>
             </TabsList>
             <TabsContent value="layers" className="flex-1 overflow-hidden mt-0">
               <LayerPanel />

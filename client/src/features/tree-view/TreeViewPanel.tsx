@@ -81,17 +81,17 @@ export function TreeViewPanel() {
   const focusedId = focusedIndex >= 0 ? currentFlatNodes[focusedIndex]?.node.id : null;
 
   return (
-    <div className="flex flex-col h-full bg-white border-l" ref={containerRef} tabIndex={0} outline="none">
-      <div className="p-3 border-b flex items-center justify-between">
+    <div className="flex flex-col h-full bg-white focus:outline-none" ref={containerRef} tabIndex={0}>
+      <div className="p-3 border-b border-gray-100 flex items-center justify-between">
         <h3 className="font-semibold text-sm">元素树</h3>
         <span className="text-xs text-gray-400">{currentFlatNodes.filter(n => n.node.type === 'shape').length} 个元素</span>
       </div>
 
-      <TreeToolbar 
-        searchQuery={searchQuery} 
-        setSearchQuery={setSearchQuery} 
-        sortBy={sortBy} 
-        setSortBy={setSortBy} 
+      <TreeToolbar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
       />
 
       <div className="flex-1 overflow-y-auto p-1">
@@ -101,10 +101,10 @@ export function TreeViewPanel() {
           </div>
         ) : (
           treeData.map(node => (
-            <TreeNode 
-              key={node.id} 
-              node={{ ...node, isExpanded: expandedIds.has(node.id) }} 
-              depth={0} 
+            <TreeNode
+              key={node.id}
+              node={{ ...node, isExpanded: expandedIds.has(node.id) }}
+              depth={0}
               focusedId={focusedId}
               onExpandToggle={handleExpandToggle}
             />

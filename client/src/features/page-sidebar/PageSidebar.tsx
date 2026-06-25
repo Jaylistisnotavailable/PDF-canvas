@@ -48,11 +48,11 @@ export function PageSidebar() {
 
   return (
     <aside
-      className="flex flex-col h-full bg-white border-r shadow-sm select-none"
-      style={{ width: 280, minWidth: 280, boxShadow: "2px 0 8px -2px rgba(0,0,0,0.05), 1px 0 3px -1px rgba(0,0,0,0.03)" }}
+      className="flex flex-col h-full bg-white select-none"
+      style={{ width: 280, minWidth: 280 }}
     >
       {/* 品牌区 */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
         <div>
           <p className="text-sm font-semibold tracking-tight">PDF Canvas</p>
           <p className="text-xs text-gray-500">PDF 标注工具</p>
@@ -60,7 +60,7 @@ export function PageSidebar() {
       </div>
 
       {/* 打开 PDF */}
-      <div className="px-4 py-3 border-b">
+      <div className="px-4 py-3 border-b border-gray-100">
         <input
           ref={fileInputRef}
           type="file"
@@ -70,7 +70,7 @@ export function PageSidebar() {
         />
         <Button
           size="sm"
-          className="w-full gap-2 text-xs"
+          className="w-full gap-2 text-xs h-8"
           onClick={() => fileInputRef.current?.click()}
         >
           <FolderOpen className="w-3.5 h-3.5" />
@@ -82,7 +82,7 @@ export function PageSidebar() {
       <div className="flex-1 overflow-y-auto">
         {/* 文件信息 */}
         {fileName && (
-          <section className="px-4 py-3 border-b">
+          <section className="px-4 py-3 border-b border-gray-100">
             <SectionHeader icon={<Info className="w-3.5 h-3.5" />} title="文件信息" />
             <InfoRow label="文件名" value={fileName} mono />
             <InfoRow label="总页数" value={`${totalPages} 页`} mono />
@@ -92,7 +92,7 @@ export function PageSidebar() {
 
         {/* 比例设置 */}
         {fileName && (
-          <section className="px-4 py-3 border-b">
+          <section className="px-4 py-3 border-b border-gray-100">
             <SectionHeader icon={<Ruler className="w-3.5 h-3.5" />} title="图纸比例" />
             <div className="flex items-end gap-1.5">
               <div className="flex-1">

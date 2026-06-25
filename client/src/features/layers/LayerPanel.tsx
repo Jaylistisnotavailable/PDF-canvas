@@ -41,11 +41,11 @@ export function LayerPanel() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white border-l shadow-sm">
-      <div className="flex items-center justify-between p-3 border-b">
-        <h3 className="font-semibold text-sm">图层管理</h3>
+    <div className="flex flex-col h-full bg-white">
+      <div className="flex items-center justify-between p-3 border-b border-gray-100">
+        <h3 className="font-semibold text-sm">Layer Management</h3>
         <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleAddLayer}>
-          <Plus className="h-4 w-4" />
+          <Plus className="h-3.5 w-3.5" />
         </Button>
       </div>
 
@@ -61,11 +61,10 @@ export function LayerPanel() {
         </DndContext>
       </div>
 
-      <Separator />
-      
-      <div className="p-3 space-y-3 bg-gray-50/50">
+      <Separator className="bg-gray-100" />
+
+      <div className="p-3 space-y-3 bg-gray-50/30">
         <LayerControls />
-        
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-600">显示尺寸标注</span>
           <Switch checked={showDimensions} onCheckedChange={() => dispatch(toggleDimensions())} />
@@ -74,7 +73,6 @@ export function LayerPanel() {
           <span className="text-xs text-gray-600">显示图例面板</span>
           <Switch checked={showLegend} onCheckedChange={() => dispatch(toggleLegend())} />
         </div>
-        
         <div className="flex gap-2 pt-1">
           <Button variant="outline" size="sm" className="flex-1 text-xs h-7" onClick={() => toggleAllVisibility(true)}>
             <Eye className="h-3 w-3 mr-1" /> 全显
