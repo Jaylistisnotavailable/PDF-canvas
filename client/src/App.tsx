@@ -167,8 +167,8 @@ function App() {
         >
           <Tabs defaultValue="layers" className="flex flex-col h-full">
             <TabsList className="w-full justify-start rounded-none border-b border-gray-100 bg-white">
-              <TabsTrigger value="layers" className="text-xs">图层</TabsTrigger>
-              <TabsTrigger value="tree" className="text-xs">元素树</TabsTrigger>
+              <TabsTrigger value="layers" className="text-xs">Layer</TabsTrigger>
+              <TabsTrigger value="tree" className="text-xs">Element Tree</TabsTrigger>
             </TabsList>
             <TabsContent value="layers" className="flex-1 overflow-hidden mt-0">
               <LayerPanel />
