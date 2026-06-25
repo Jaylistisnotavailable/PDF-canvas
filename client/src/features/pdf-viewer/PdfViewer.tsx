@@ -12,6 +12,7 @@ import { usePdfDocument } from './usePdfDocument';
 import { AnnotationCanvas } from '@/features/drawing/AnnotationCanvas';
 import { DimensionOverlay } from '@/features/layers/DimensionOverlay';
 import { LegendPanel } from '@/features/layers/LegendPanel';
+import { toggleToolbar } from '@/app/store/slices/uiSlice';
 
 export function PdfViewer() {
   const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ export function PdfViewer() {
   const scale = useAppSelector((state) => state.pdf.scale);
   const currentPage = useAppSelector((state) => state.pdf.currentPage);
   const totalPages = useAppSelector((state) => state.pdf.totalPages);
-  
+  const toolbarCollapsed = useAppSelector((state) => state.ui.toolbarCollapsed);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // 拖拽平移状态
@@ -122,12 +123,35 @@ export function PdfViewer() {
 
   return (
     <div className="flex flex-col h-full w-full bg-gray-100">
-      {/* 顶部工具栏 */}
-      <PdfToolbar 
-        onFitWidth={handleFitWidth} 
-        onFitPage={handleFitPage} 
-      />
+      {/* 顶部工具栏 - 支持折叠 */}
+      <div
+        className="transition-all duration-300 ease-in-out overflow-hidden"
+        style={{
+          maxHeight: toolbarCollapsed ? '0px' : '60px',
+          opacity: toolbarCollapsed ? 0 : 1,
+        }}
+      >
+        <PdfToolbar
+          onFitWidth={handleFitWidth}
+          onFitPage={handleFitPage}
+        />
+      </div>
       
+      {/* 工具栏折叠时的迷你控制条 */}
+      {toolbarCollapsed && (
+        <div className="flex items-center justify-center gap-2 py-1 bg-white/80 backdrop-blur-sm border-b border-gray-200/50 z-20">
+          <span className="text-xs text-gray-400">
+            第 {currentPage}/{totalPages} 页 · {Math.round(scale * 100)}%
+          </span>
+          <button
+            onClick={() => dispatch(toggleToolbar())}
+            className="text-xs text-blue-500 hover:text-blue-700 px-2 py-0.5 rounded hover:bg-blue-50 transition-colors"
+          >
+            展开工具栏
+          </button>
+        </div>
+      )}
+
       {/* 核心视口容器 (Overflow hidden 用于裁剪超出边界的 PDF) */}
       <div 
         ref={containerRef}

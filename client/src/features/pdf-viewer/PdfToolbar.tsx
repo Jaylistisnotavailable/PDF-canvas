@@ -1,14 +1,18 @@
+// client/src/features/pdf-viewer/PdfToolbar.tsx
+
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { 
   setCurrentPage, setScale, zoomIn, zoomOut, rotate 
 } from '@/app/store/slices/pdfSlice';
+import { toggleToolbar } from '@/app/store/slices/uiSlice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
-  ZoomIn, ZoomOut, RotateCw, Maximize2, Maximize 
+  ZoomIn, ZoomOut, RotateCw, Maximize2, Maximize, 
+  ChevronUp
 } from 'lucide-react';
 
 interface PdfToolbarProps {
@@ -104,6 +108,21 @@ export function PdfToolbar({ onFitWidth, onFitPage }: PdfToolbarProps) {
           <RotateCw className="h-4 w-4" />
         </Button>
       </div>
+
+      {/* 折叠按钮 */}
+      <div className="ml-auto">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => dispatch(toggleToolbar())}
+          title="收起工具栏"
+        >
+          <ChevronUp className="h-4 w-4" />
+        </Button>
+      </div>
+
+
+
     </div>
   );
 }
