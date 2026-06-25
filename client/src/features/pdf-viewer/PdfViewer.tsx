@@ -29,6 +29,8 @@ export function PdfViewer() {
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [isSpacePressed, setIsSpacePressed] = useState(false);
 
+  const rotation = useAppSelector((state) => state.pdf.pageRotation);
+
   const handleFileSelect = useCallback((file: File) => loadPdf(file), [loadPdf]);
 
   // 1. Ctrl + 滚轮缩放
@@ -76,6 +78,43 @@ export function PdfViewer() {
     };
   }, [dispatch, currentPage, totalPages, scale]);
 
+  // 动态计算“适宽”
+  const handleFitWidth = async () => {
+    if (!document || !containerRef.current) return;
+    try {
+      const page = await document.getPage(currentPage);
+      // 获取页面在 1.0 缩放下的原始尺寸
+      const viewport = page.getViewport({ scale: 1.0, rotation });
+      const containerWidth = containerRef.current.clientWidth;
+      
+      // 计算适配宽度所需的 scale (减去 20px 作为左右边距 padding)
+      const newScale = (containerWidth - 20) / viewport.width;
+      dispatch(setScale(newScale));
+    } catch (err) {
+      console.error("Failed to fit width:", err);
+    }
+  };
+
+  // 动态计算“适页”
+  const handleFitPage = async () => {
+    if (!document || !containerRef.current) return;
+    try {
+      const page = await document.getPage(currentPage);
+      const viewport = page.getViewport({ scale: 1.0, rotation });
+      const containerWidth = containerRef.current.clientWidth;
+      const containerHeight = containerRef.current.clientHeight;
+      
+      // 分别计算宽度和高度的比例，取较小值以确保整个页面都在视图内
+      const scaleX = (containerWidth - 20) / viewport.width;
+      const scaleY = (containerHeight - 20) / viewport.height;
+      const newScale = Math.min(scaleX, scaleY);
+      
+      dispatch(setScale(newScale));
+    } catch (err) {
+      console.error("Failed to fit page:", err);
+    }
+  };
+
   // 未加载 PDF 时显示上传区
   if (!document) {
     return <PdfDropZone onFileSelect={handleFileSelect} />;
@@ -85,8 +124,8 @@ export function PdfViewer() {
     <div className="flex flex-col h-full w-full bg-gray-100">
       {/* 顶部工具栏 */}
       <PdfToolbar 
-        onFitWidth={() => dispatch(setScale(1.2))} 
-        onFitPage={() => dispatch(setScale(1.0))} 
+        onFitWidth={handleFitWidth} 
+        onFitPage={handleFitPage} 
       />
       
       {/* 核心视口容器 (Overflow hidden 用于裁剪超出边界的 PDF) */}
