@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
-import { deleteSelected, clearSelection, updateShape } from '@/app/store/slices/drawingSlice';
+import { deleteSelected, updateShape } from '@/app/store/slices/drawingSlice';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, Trash2, CheckSquare, Square, Layers } from 'lucide-react';
+import { Search, Trash2, Layers } from 'lucide-react';
 import type { SortBy } from './types';
 import {
   Dialog,
@@ -27,10 +27,10 @@ export function TreeToolbar({ searchQuery, setSearchQuery, sortBy, setSortBy }: 
   const layers = useAppSelector(state => state.layer.layers);
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
-  const handleSelectAll = () => {
+  //const handleSelectAll = () => {
     // 简化：全选当前页所有可见图形
     // 实际项目中可能需要遍历树节点
-  };
+  //};
 
   const handleBatchDelete = () => {
     if (selectedIds.length > 0) {
