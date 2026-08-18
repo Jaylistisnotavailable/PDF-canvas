@@ -19,7 +19,7 @@ export function AnnotationCanvas() {
   const activeLayerId = useAppSelector(state => state.layer.activeLayerId);
   const shapes = useAppSelector(state => selectShapesByPage(state, currentPage));
   const selectedShapes = useAppSelector(selectSelectedShapes);
-  const showDimensions = useAppSelector(state => state.layer.showDimensions);
+  // const showDimensions = useAppSelector(state => state.layer.showDimensions);
 
   const [tempShape, setTempShape] = useState<Shape | null>(null);
   const [textDialog, setTextDialog] = useState<{ x: number; y: number; open: boolean }>({ x: 0, y: 0, open: false });
