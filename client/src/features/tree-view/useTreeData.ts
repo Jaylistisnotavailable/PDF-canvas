@@ -2,8 +2,9 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import type { RootState } from '@/app/store';
-import type { Shape, Layer } from '@/app/store/slices/drawingSlice';
+import type { Shape } from '@/app/store/slices/drawingSlice';
 import type { TreeNodeData, SortBy } from './types';
+import type { Layer } from './types';
 
 // 编号前缀映射
 const CODE_PREFIX: Record<Shape['type'], string> = {
