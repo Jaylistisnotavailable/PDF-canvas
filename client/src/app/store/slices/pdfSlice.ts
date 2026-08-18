@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
 
 // pdfjs-dist 的文档对象类型，这里用 any 避免复杂的类型导入问题
-type PdfDocumentProxy = any; 
+// type PdfDocumentProxy = any; 
 
 export interface PdfState {
   currentPage: number;
