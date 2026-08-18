@@ -28,6 +28,6 @@ export abstract class BaseTool {
   abstract onMouseDown(e: CanvasEvent, ctx: ToolContext): void;
   abstract onMouseMove(e: CanvasEvent, ctx: ToolContext): void;
   abstract onMouseUp(e: CanvasEvent, ctx: ToolContext): void;
-  onDblClick?(e: CanvasEvent, ctx: ToolContext): void {}
+  // onDblClick?(e: CanvasEvent, ctx: ToolContext): void {}
   onKeyDown?(e: KeyboardEvent, ctx: ToolContext): void {}
 }
