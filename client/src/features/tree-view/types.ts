@@ -17,3 +17,10 @@ export interface TreeNodeData {
 }
 
 export type SortBy = 'createdAt' | 'type' | 'name';
+
+export interface Layer {
+  id: string;
+  name: string;
+  visible: boolean;
+  locked: boolean;
+}
