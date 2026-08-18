@@ -1,4 +1,4 @@
-import type { Shape, Layer } from '@/store/slices/drawingSlice';
+import type { Shape } from '@/store/slices/drawingSlice';
 
 export type TreeNodeType = 'layer' | 'shape';
 
