@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { selectShape, clearSelection, deleteShape, updateShape, addShape } from '@/app/store/slices/drawingSlice';
-import { ChevronRight, ChevronDown, Eye, EyeOff, Lock, Unlock } from 'lucide-react';
+import { ChevronRight, ChevronDown, Eye } from 'lucide-react';
 import { 
   CircleDot, Minus, Share2, Pentagon, Square, Circle, Type, Ruler, Folder
 } from 'lucide-react';
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/context-menu";
 import { Input } from '@/components/ui/input';
 import type { TreeNodeData } from './types';
-import type { Shape } from '@/app/store/slices/drawingSlice';
+// import type { Shape } from '@/app/store/slices/drawingSlice';
 
 const shapeIcons: Record<string, any> = {
   point: CircleDot, line: Minus, polyline: Share2, polygon: Pentagon,
