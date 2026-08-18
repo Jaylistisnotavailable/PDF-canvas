@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { Shape } from '@/app/store/slices/drawingSlice';
 import type { Layer } from '@/app/store/slices/layerSlice';
-import { distance, distanceToSegment, isPointInPolygon, getBounds } from '../utils/geometry';
+import { distance, distanceToSegment, isPointInPolygon } from '../utils/geometry';
 
 export function useHitTest(shapes: Shape[], layers: Layer[], tolerance: number = 5) {
   return useCallback((x: number, y: number): Shape | null => {
