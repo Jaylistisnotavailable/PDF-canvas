@@ -4,11 +4,6 @@ export default {
   darkMode: ["class"],
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: { "2xl": "1400px" },
-    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -44,11 +39,26 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        editor: {
+          background: "hsl(var(--editor-background))",
+          panel: "hsl(var(--editor-panel))",
+          workspace: "hsl(var(--editor-workspace))",
+          sidebar: "hsl(var(--editor-sidebar))",
+          toolbar: "hsl(var(--editor-toolbar))",
+          selection: "hsl(var(--editor-selection))",
+          hover: "hsl(var(--editor-hover))",
+          active: "hsl(var(--editor-active))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontSize: {
+        xs: ["12px", { lineHeight: "16px" }],
+        sm: ["13px", { lineHeight: "18px" }],
+        base: ["14px", { lineHeight: "20px" }],
       },
     },
   },

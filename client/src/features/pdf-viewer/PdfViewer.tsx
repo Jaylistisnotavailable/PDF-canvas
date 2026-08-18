@@ -1,40 +1,34 @@
-// client/src/features/pdf-viewer/PdfViewer.tsx
-
-import { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState, forwardRef, useImperativeHandle } from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { setScale, setCurrentPage } from '@/app/store/slices/pdfSlice';
 import { PdfCanvas } from './PdfCanvas';
-import { PdfToolbar } from './PdfToolbar';
 import { PdfDropZone } from './PdfDropZone';
 import { usePdfDocument } from './usePdfDocument';
-
-// 引入绘图与标注叠加层
 import { AnnotationCanvas } from '@/features/drawing/AnnotationCanvas';
 import { DimensionOverlay } from '@/features/layers/DimensionOverlay';
 import { LegendPanel } from '@/features/layers/LegendPanel';
-import { toggleToolbar } from '@/app/store/slices/uiSlice';
+import { usePdfFit } from './usePdfFit';
 
-export function PdfViewer() {
+export const PdfViewer = forwardRef<{ handleFitWidth: () => void; handleFitPage: () => void }, {}>((_, ref) => {
   const dispatch = useAppDispatch();
-  // const document = useAppSelector((state) => state.pdf.document);
-  const { document, loadPdf } = usePdfDocument(); // 使用自定义 Hook 获取 PDF 文档
+  const { document, loadPdf } = usePdfDocument();
   const scale = useAppSelector((state) => state.pdf.scale);
   const currentPage = useAppSelector((state) => state.pdf.currentPage);
   const totalPages = useAppSelector((state) => state.pdf.totalPages);
-  const toolbarCollapsed = useAppSelector((state) => state.ui.toolbarCollapsed);
+  const rotation = useAppSelector((state) => state.pdf.pageRotation);
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  // 拖拽平移状态
+
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [isSpacePressed, setIsSpacePressed] = useState(false);
 
-  const rotation = useAppSelector((state) => state.pdf.pageRotation);
+  const { handleFitWidth, handleFitPage } = usePdfFit(containerRef);
+
+  useImperativeHandle(ref, () => ({ handleFitWidth, handleFitPage }));
 
   const handleFileSelect = useCallback((file: File) => loadPdf(file), [loadPdf]);
 
-  // 1. Ctrl + 滚轮缩放
   const handleWheel = useCallback((e: React.WheelEvent) => {
     if (e.ctrlKey) {
       e.preventDefault();
@@ -43,7 +37,6 @@ export function PdfViewer() {
     }
   }, [dispatch, scale]);
 
-  // 2. 鼠标拖拽平移
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.button === 1 || (e.button === 0 && isSpacePressed)) {
       e.preventDefault();
@@ -58,7 +51,6 @@ export function PdfViewer() {
 
   const handleMouseUp = useCallback(() => setIsPanning(false), []);
 
-  // 3. 键盘快捷键
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).tagName === 'INPUT') return;
@@ -70,7 +62,6 @@ export function PdfViewer() {
       else if (e.key === '0') dispatch(setScale(1.0));
     };
     const handleKeyUp = (e: KeyboardEvent) => { if (e.code === 'Space') setIsSpacePressed(false); };
-
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     return () => {
@@ -79,81 +70,13 @@ export function PdfViewer() {
     };
   }, [dispatch, currentPage, totalPages, scale]);
 
-  // 动态计算“适宽”
-  const handleFitWidth = async () => {
-    if (!document || !containerRef.current) return;
-    try {
-      const page = await document.getPage(currentPage);
-      // 获取页面在 1.0 缩放下的原始尺寸
-      const viewport = page.getViewport({ scale: 1.0, rotation });
-      const containerWidth = containerRef.current.clientWidth;
-      
-      // 计算适配宽度所需的 scale (减去 20px 作为左右边距 padding)
-      const newScale = (containerWidth - 20) / viewport.width;
-      dispatch(setScale(newScale));
-    } catch (err) {
-      console.error("Failed to fit width:", err);
-    }
-  };
-
-  // 动态计算“适页”
-  const handleFitPage = async () => {
-    if (!document || !containerRef.current) return;
-    try {
-      const page = await document.getPage(currentPage);
-      const viewport = page.getViewport({ scale: 1.0, rotation });
-      const containerWidth = containerRef.current.clientWidth;
-      const containerHeight = containerRef.current.clientHeight;
-      
-      // 分别计算宽度和高度的比例，取较小值以确保整个页面都在视图内
-      const scaleX = (containerWidth - 20) / viewport.width;
-      const scaleY = (containerHeight - 20) / viewport.height;
-      const newScale = Math.min(scaleX, scaleY);
-      
-      dispatch(setScale(newScale));
-    } catch (err) {
-      console.error("Failed to fit page:", err);
-    }
-  };
-
-  // 未加载 PDF 时显示上传区
   if (!document) {
     return <PdfDropZone onFileSelect={handleFileSelect} />;
   }
 
   return (
-    <div className="flex flex-col h-full w-full bg-gray-100">
-      {/* 顶部工具栏 - 支持折叠 */}
+    <div className="flex flex-col h-full w-full bg-editor-workspace relative">
       <div
-        className="transition-all duration-300 ease-in-out overflow-hidden"
-        style={{
-          maxHeight: toolbarCollapsed ? '0px' : '60px',
-          opacity: toolbarCollapsed ? 0 : 1,
-        }}
-      >
-        <PdfToolbar
-          onFitWidth={handleFitWidth}
-          onFitPage={handleFitPage}
-        />
-      </div>
-      
-      {/* 工具栏折叠时的迷你控制条 */}
-      {toolbarCollapsed && (
-        <div className="flex items-center justify-center gap-2 py-1 bg-white/80 backdrop-blur-sm border-b border-gray-200/50 z-20">
-          <span className="text-xs text-gray-400">
-            第 {currentPage}/{totalPages} 页 · {Math.round(scale * 100)}%
-          </span>
-          <button
-            onClick={() => dispatch(toggleToolbar())}
-            className="text-xs text-blue-500 hover:text-blue-700 px-2 py-0.5 rounded hover:bg-blue-50 transition-colors"
-          >
-            展开工具栏
-          </button>
-        </div>
-      )}
-
-      {/* 核心视口容器 (Overflow hidden 用于裁剪超出边界的 PDF) */}
-      <div 
         ref={containerRef}
         className="relative flex-1 overflow-hidden select-none"
         style={{ cursor: isPanning ? 'grabbing' : isSpacePressed ? 'grab' : 'default' }}
@@ -163,32 +86,19 @@ export function PdfViewer() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
-        {/* 平移容器 (跟随鼠标拖拽移动) */}
-        <div 
+        <div
           className="absolute inset-0 flex items-center justify-center"
           style={{ transform: `translate(${panOffset.x}px, ${panOffset.y}px)` }}
         >
-          {/* 页面物理容器 (限制 PDF 和 Canvas 的实际宽高) */}
-          <div className="relative shadow-2xl bg-white">
-            {/* 第 1 层：PDF 渲染层 (z-0) */}
+          <div className="relative shadow-sm bg-white">
             <PdfCanvas document={document} />
-            
-            {/* 第 2 层：用户绘图层 (z-10) - 接收所有鼠标事件 */}
             <AnnotationCanvas />
-            
-            {/* 第 3 层：尺寸标注层 (z-20) - 必须 pointer-events-none 以免阻挡绘图 */}
             <DimensionOverlay />
           </div>
         </div>
-
-        {/* 第 4 层：浮动图例 (z-40) - 放在平移容器外部，保持固定在视口右下角 */}
         <LegendPanel />
-        
-        {/* 页码信息浮层 与悬浮工具条冲突，暂时注释掉 */}
-        {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-50 pointer-events-none">
-          第 {currentPage} / {totalPages} 页
-        </div> */}
       </div>
     </div>
   );
-}
+});
+PdfViewer.displayName = 'PdfViewer';
