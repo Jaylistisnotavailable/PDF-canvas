@@ -1,5 +1,5 @@
 // client/src/components/Layout.tsx
-import React from 'react';
+// import React from 'react';
 
 export const Toolbar = () => (
   <div className="flex flex-col items-center gap-3">
