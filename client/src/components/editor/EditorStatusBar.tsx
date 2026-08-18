@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
 import { setScale, setCurrentPage } from '@/app/store/slices/pdfSlice';
-import { ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, Fit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function EditorStatusBar({ onFitWidth, onFitPage }: { onFitWidth?: () => void; onFitPage?: () => void }) {
