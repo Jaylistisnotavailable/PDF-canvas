@@ -2,7 +2,7 @@ import { useEffect, RefObject } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { addShape, updateShape, selectShape, clearSelection, deleteSelected } from '@/app/store/slices/drawingSlice';
 import type { Shape } from '@/app/store/slices/drawingSlice';
-import { BaseTool, CanvasEvent, ToolContext } from '../tools/BaseTool';
+import { BaseTool, ToolContext } from '../tools/BaseTool';
 import { SelectTool } from '../tools/SelectTool';
 import { PointTool } from '../tools/PointTool';
 import { LineTool } from '../tools/LineTool';
