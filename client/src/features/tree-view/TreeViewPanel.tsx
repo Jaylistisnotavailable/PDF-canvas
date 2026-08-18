@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
+import { useAppDispatch } from '@/app/store/hooks';
 import { selectShape, clearSelection } from '@/app/store/slices/drawingSlice';
 import { useTreeData } from './useTreeData';
 import { TreeToolbar } from './TreeToolbar';
